@@ -57,9 +57,6 @@ namespace containers {
 
     template<class T>
     typename queue<T>::forward_iterator queue<T>::begin() {
-        if (size == 0) {
-            return forward_iterator(nullptr);
-        }
         return forward_iterator(first.get());
     }
 
@@ -124,6 +121,7 @@ namespace containers {
         }
         if (i.it_ptr == nullptr) throw std::logic_error ("out of borders");
         i.it_ptr->next_element = std::move(d_it.it_ptr->next_element);
+        size--;
     }
 
     template<class T>
@@ -143,6 +141,7 @@ namespace containers {
         if (ins_it == this->begin()) {
             tmp->next_element = std::move(first);
             first = std::move(tmp);
+            size++;
             return;
         }
         while((i.it_ptr != nullptr) && (i.it_ptr->next() != ins_it)) {
@@ -151,6 +150,7 @@ namespace containers {
         if (i.it_ptr == nullptr) throw std::logic_error ("out of borders");
         tmp->next_element = std::move(i.it_ptr->next_element);
         i.it_ptr->next_element = std::move(tmp);
+        size++;
     }
 
     template<class T>
