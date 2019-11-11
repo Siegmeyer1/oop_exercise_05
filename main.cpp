@@ -3,56 +3,7 @@
 #include "octagon.h"
 #include "containers/queue.h"
 
-/*==================план действий============//
- * сделать менюшку с кейсами. Кейсы:
- * ман
- * выход
- * очистка очереди
- * обычный пуш
- * пуш по номеру
- * обычный поп
- * делит по номеру
- * вывод очереди на экран
- * вывод кол-ва октагонов с площадью меньше заданной (зачем???)
-//===========================================*/
-
 int main() {
-    /*Octagon<int> test1(std::cin);
-    Octagon<int> test2(std::cin);
-    Octagon<int> test3(std::cin);
-
-    containers::queue<Octagon<int>> q;
-    containers::queue<Octagon<int>> c_q;
-
-    q.push(test1);
-    q.push(test2);
-    q.push(test3);
-    q.push(test1);
-    q.push(test2);
-    q.push(test3);
-    std::for_each(q.begin(), q.end(), [](Octagon<int>& X){X.Printout(std::cout);});
-    std::cout << q.length() << std::endl;
-
-    //c_q = q;
-    //std::for_each(c_q.begin(), c_q.end(), [](Octagon<int>& X){X.Printout(std::cout);});
-
-     0 0     2 0     4 0     4 2     4 4     2 4     0 4     0 2
-0 0     1 1     2 2     3 3     4 4     5 5     6 6     7 7
-1 1     2 2     3 3     4 4     5 5     6 6     7 7     8 8
-
-    //containers::queue<Octagon<int>>::forward_iterator it = q.begin();
-    //Octagon<int> test_unit = *it;
-    //++it;
-    //++it;
-    q.insert_by_number(3, test1);
-    std::for_each(q.begin(), q.end(), [](Octagon<int>& X){X.Printout(std::cout);});
-    std::cout << std::endl;
-    q.delete_by_number(3);
-    std::for_each(q.begin(), q.end(), [](Octagon<int>& X){X.Printout(std::cout);});
-    int N;
-    std::cin >> N;
-    std::cout << std::count_if(q.begin(), q.end(), [=](Octagon<int>& X){return X.Area() < N;});
-    return 0;*/
     size_t N;
     float S;
     char option = '0';
@@ -81,8 +32,8 @@ int main() {
             case '2': {
                 std::cout << "enter position to insert to: ";
                 std::cin >> N;
-                oct = Octagon<int>(std::cin);
                 std::cout << "enter octagon: ";
+                oct = Octagon<int>(std::cin);
                 q.insert_by_number(N, oct);
                 break;
             }
@@ -103,14 +54,13 @@ int main() {
             case '6': {
                 std::cout << "enter max area to search to: ";
                 std::cin >> S;
-                std::cout <<"number of elements with value less than " << S << "is " << std::count_if(q.begin(), q.end(), [=](Octagon<int>& X){return X.Area() < S;}) << std::endl;
+                std::cout <<"number of elements with value less than " << S << " is " << std::count_if(q.begin(), q.end(), [=](Octagon<int>& X){return X.Area() < S;}) << std::endl;
                 break;
             }
             default:
                 std::cout << "no such option. Try m for man" << std::endl;
                 break;
         }
-
     }
-
+    return 0;
 }
