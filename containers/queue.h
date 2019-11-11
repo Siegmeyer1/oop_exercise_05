@@ -113,24 +113,17 @@ namespace containers {
 
     template<class T>
     void queue<T>::delete_by_it(containers::queue<T>::forward_iterator d_it) {
-        queue<T> res;
-        int flag = 0;
-        T tmp;
         forward_iterator i = this->begin(), end = this->end();
-        while(i != end) {
-            if (i == d_it) {
-                ++i;
-                flag = 1;
-                this->pop();
-            } else {
-                ++i;
-                tmp = this->top();
-                res.push(tmp);
-                this->pop();
-            }
+        if (d_it == end) throw std::logic_error ("out of borders");
+        if (d_it == this->begin()) {
+            this->pop();
+            return;
         }
-        if (!flag) throw std::logic_error ("no such element in queue");
-        *this = res;
+        while((i.it_ptr != nullptr) && (i.it_ptr->next() != d_it)) {
+           ++i;
+        }
+        if (i.it_ptr == nullptr) throw std::logic_error ("out of borders");
+        i.it_ptr->next_element = std::move(d_it.it_ptr->next_element);
     }
 
     template<class T>
@@ -145,30 +138,19 @@ namespace containers {
 
     template<class T>
     void queue<T>::insert_by_it(containers::queue<T>::forward_iterator ins_it, T& value) {
-        queue<T> res;
-        int flag = 0;
-        T tmp;
-        forward_iterator i = this->begin(), end = this->end();
-        do {
-            if ((i == end) && (i == ins_it)) {
-                res.push(value);
-                flag = 1;
-            } else if (i == ins_it) {
-                ++i;
-                flag = 1;
-                res.push(value);
-                tmp = this->top();
-                res.push(tmp);
-                this->pop();
-            } else {
-                ++i;
-                tmp = this->top();
-                res.push(tmp);
-                this->pop();
-            }
-        }  while(i != end);
-        if (!flag) throw std::logic_error ("out of queue borders");
-        *this = res;
+        auto tmp = std::unique_ptr<element>(new element{value});
+        forward_iterator i = this->begin();
+        if (ins_it == this->begin()) {
+            tmp->next_element = std::move(first);
+            first = std::move(tmp);
+            return;
+        }
+        while((i.it_ptr != nullptr) && (i.it_ptr->next() != ins_it)) {
+            ++i;
+        }
+        if (i.it_ptr == nullptr) throw std::logic_error ("out of borders");
+        tmp->next_element = std::move(i.it_ptr->next_element);
+        i.it_ptr->next_element = std::move(tmp);
     }
 
     template<class T>
@@ -198,6 +180,7 @@ namespace containers {
 
     template<class T>
     typename queue<T>::forward_iterator& queue<T>::forward_iterator::operator++() {
+        if (it_ptr == nullptr) throw std::logic_error ("out of queue borders");
         *this = it_ptr->next();
         return *this;
     }
